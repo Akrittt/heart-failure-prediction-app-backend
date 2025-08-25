@@ -45,7 +45,11 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(request -> {
                 CorsConfiguration config = new CorsConfiguration();
                 config.setAllowCredentials(true);
-                config.addAllowedOrigin("http://localhost:5173");
+                config.setAllowedOrigins(List.of(
+                    "http://localhost:5173",
+                    "https://heart-failure-prediction-app-a8un.vercel.app",
+                    "https://heart-failure-prediction-app.onrender.com"
+                ));
                 config.addAllowedHeader("*");
                 config.addAllowedMethod("*");
                 return config;
