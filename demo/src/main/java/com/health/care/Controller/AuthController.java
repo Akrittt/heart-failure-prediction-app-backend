@@ -45,9 +45,6 @@ public class AuthController {
     @Autowired
     private OtpService otpService;
 
-    @Autowired
-    private StringRedisTemplate redisTemplate;
-
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @PostMapping("/signin")
