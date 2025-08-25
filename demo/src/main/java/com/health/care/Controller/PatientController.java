@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/patients")
-@CrossOrigin("http://localhost:5173/")
+@CrossOrigin("https://heart-failure-prediction-app-a8un.vercel.app/")
 public class PatientController {
 
     private final PatientService patientService;

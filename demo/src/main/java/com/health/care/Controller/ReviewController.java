@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173/")
+@CrossOrigin(origins = "https://heart-failure-prediction-app-a8un.vercel.app/")
 @RequestMapping("/api/reviews")
 public class ReviewController {
     @Autowired

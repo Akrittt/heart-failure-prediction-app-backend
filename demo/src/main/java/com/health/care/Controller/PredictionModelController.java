@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
-@CrossOrigin("http://localhost:5173/")
+@CrossOrigin("https://heart-failure-prediction-app-a8un.vercel.app/")
 @RequestMapping("/api/predict")
 public class PredictionModelController {
 

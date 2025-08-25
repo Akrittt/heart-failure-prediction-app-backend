@@ -27,7 +27,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin("http://localhost:5173/")
+@CrossOrigin("https://heart-failure-prediction-app-a8un.vercel.app/")
 public class AuthController {
 
     @Autowired
