@@ -103,14 +103,6 @@ public class AuthController {
             return ResponseEntity.ok("OTP sent successfully to your email ");
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
-        if (userDetails == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not authenticated");
-        }
-        return ResponseEntity.ok(userDetails);
-    }
-
     @PostMapping("/verify-otp")
     public ResponseEntity<?> verifyOtpAndRegister(@RequestBody VerifyOtpRequest verifyOtpRequest){
         if (!otpService.validateOtp(verifyOtpRequest.getEmail(), verifyOtpRequest.getOtp())){
@@ -124,11 +116,21 @@ public class AuthController {
                 verifyOtpRequest.getEmail(),
                 passwordEncoder.encode(verifyOtpRequest.getPassword())
         );
-        
+
         // Save the user to the database
         userRepository.save(user);
 
         return ResponseEntity.ok("User registered Successfully!");
 
     }
+
+    @GetMapping("/user")
+    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not authenticated");
+        }
+        return ResponseEntity.ok(userDetails);
+    }
+
+
 }
