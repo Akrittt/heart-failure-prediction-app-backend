@@ -5,6 +5,7 @@ import com.health.care.Entity.User;
 import com.health.care.Exception.ResourceNotFoundException;
 import com.health.care.Repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import java.util.List;
 public class PatientService {
 
     private final PatientRepository patientRepository;
+
 
     @Autowired
     public PatientService(PatientRepository patientRepository) {
@@ -36,7 +38,7 @@ public class PatientService {
         if (patientRepository.existsByPatientIdAndUser(patient.getPatientId(), user)) {
             throw new IllegalArgumentException("Patient with ID " + patient.getPatientId() + " already exists");
         }
-        
+
         // Set the user for the patient
         patient.setUser(user);
         return patientRepository.save(patient);
@@ -45,7 +47,7 @@ public class PatientService {
     @Transactional
     public Patient updatePatient(Long id, Patient patientDetails, User user) {
         Patient patient = getPatientByIdAndUser(id, user);
-        
+
         // Update patient details
         patient.setFullName(patientDetails.getFullName());
         patient.setDateOfBirth(patientDetails.getDateOfBirth());
@@ -61,7 +63,7 @@ public class PatientService {
         patient.setHeight(patientDetails.getHeight());
         patient.setWeight(patientDetails.getWeight());
         patient.setBmi(patientDetails.getBmi());
-        
+
         return patientRepository.save(patient);
     }
 
@@ -70,4 +72,7 @@ public class PatientService {
         Patient patient = getPatientByIdAndUser(id, user);
         patientRepository.delete(patient);
     }
+
+
+
 }

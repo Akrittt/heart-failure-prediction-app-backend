@@ -6,6 +6,7 @@ import com.health.care.Repository.UserRepository;
 import com.health.care.Security.JwtTokenProvider;
 import com.health.care.Service.OtpService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +21,8 @@ import com.health.care.Entity.User;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -41,6 +44,9 @@ public class AuthController {
 
     @Autowired
     private OtpService otpService;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
@@ -105,7 +111,8 @@ public class AuthController {
 
     @PostMapping("/verify-otp")
     public ResponseEntity<?> verifyOtpAndRegister(@RequestBody VerifyOtpRequest verifyOtpRequest){
-        if (!otpService.validateOtp(verifyOtpRequest.getEmail(), verifyOtpRequest.getOtp())){
+        String email = verifyOtpRequest.getEmail().toLowerCase().trim();
+        if (!otpService.validateOtp(email, verifyOtpRequest.getOtp())){
             return ResponseEntity.badRequest().body("Error: Invalid or expired OTP. ");
         }
 
@@ -113,7 +120,7 @@ public class AuthController {
                 verifyOtpRequest.getFirstname(),
                 verifyOtpRequest.getLastname(),
                 verifyOtpRequest.getHospitalName(),
-                verifyOtpRequest.getEmail(),
+                email,
                 passwordEncoder.encode(verifyOtpRequest.getPassword())
         );
 
@@ -131,6 +138,8 @@ public class AuthController {
         }
         return ResponseEntity.ok(userDetails);
     }
+
+
 
 
 }

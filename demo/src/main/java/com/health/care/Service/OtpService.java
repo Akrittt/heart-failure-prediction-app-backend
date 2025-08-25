@@ -1,10 +1,14 @@
 package com.health.care.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.Random;
 
 
@@ -17,6 +21,8 @@ public class OtpService {
     @Autowired
     private CacheManager cacheManager;
 
+    private static final Logger logger = LoggerFactory.getLogger(OtpService.class);
+
     public String generateOtp(String mail){
         Random random = new Random();
         String otp = String.format("%06d", random.nextInt(999999));
@@ -28,15 +34,17 @@ public class OtpService {
 
     }
 
-    public void sendOtp(String toEmail, String otp){
-        try{
+    public void sendOtp(String toEmail, String otp) {
+        try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(toEmail);
             message.setSubject("Your OTP for Healthcare.ai");
             message.setText("Your OTP is: " + otp + "\n\nThis OTP is valid for 5 minutes.");
             mailSender.send(message);
-        }catch (Exception e){
-            System.out.println(e);
+            logger.info("OTP sent to {} at {}", toEmail, LocalDateTime.now());
+        } catch (Exception e) {
+            logger.error("Failed to send OTP to " + toEmail, e);
+            throw new RuntimeException("Failed to send OTP", e);
         }
     }
 
